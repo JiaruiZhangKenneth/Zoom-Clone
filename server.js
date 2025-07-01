@@ -3,6 +3,7 @@ const fs = require("fs");
 const https = require("https");
 const { v4: uuidV4 } = require("uuid");
 const { Server } = require("socket.io");
+const { ExpressPeerServer } = require("peer");
 
 const app = express();
 
@@ -14,6 +15,12 @@ const server = https.createServer(
     },
     app
     );
+
+const peerServer = ExpressPeerServer(server, {
+    path: "/peerjs",
+});
+
+app.use("/peerjs", peerServer);
 
 // Initialize Socket.IO
 const io = new Server(server);
